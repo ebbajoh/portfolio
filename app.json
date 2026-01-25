@@ -23,6 +23,7 @@
     },
     "web": {
       "output": "static",
+      "basePath": "/portfolio",
       "favicon": "./assets/images/favicon.png"
     },
     "plugins": [
@@ -45,4 +46,6 @@
       "reactCompiler": true
     }
   }
+
+  
 }
