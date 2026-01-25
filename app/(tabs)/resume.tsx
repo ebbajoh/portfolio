@@ -41,7 +41,7 @@ export default function ResumeScreen() {
       {/* Resume image */}
       <View style={styles.imageWrapper}>
      <Image
-  source={require("../../assets/images/ebbaCV.png")}
+  source={require("../../assets/images/CVebbaJ.png")}
   style={styles.image}
   resizeMode="contain"
 />
