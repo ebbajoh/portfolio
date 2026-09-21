@@ -9,7 +9,6 @@ import {
   ScrollView,
   StyleSheet,
   Text,
-  useWindowDimensions,
   View,
 } from "react-native";
 
@@ -185,8 +184,6 @@ function ProjectSection({
 }) {
   const [open, setOpen] = useState(false);
   const meta = PROJECTS_META[index];
-  const { width } = useWindowDimensions();
-  const wide = width >= 900;
   const flip = index % 2 === 1;
   const tint = (alpha: number) => `rgba(${meta.accent}, ${alpha})`;
 
@@ -253,13 +250,12 @@ function ProjectSection({
         style={[
           detail.card,
           { backgroundColor: tint(0.22) },
-          wide && { flexDirection: flip ? "row-reverse" : "row" },
+          { flexDirection: flip ? "row-reverse" : "row" },
         ]}
       >
         <View
           style={[
             detail.cardMedia,
-            wide && detail.cardMediaWide,
             { aspectRatio: meta.imageRatio ?? 16 / 10 },
           ]}
         >
@@ -281,7 +277,7 @@ function ProjectSection({
           )}
         </View>
 
-        <View style={[detail.cardBody, wide && detail.cardBodyWide]}>
+        <View style={detail.cardBody}>
           <View>
             <Text style={detail.index}>
               {String(index + 1).padStart(2, "0")} · {meta.category}
@@ -359,9 +355,6 @@ function ProjectSection({
 
 /* ---------- Project: Live Study Room ---------- */
 function LiveStudyRoomDetail() {
-  const { width } = useWindowDimensions();
-  const narrow = width < 640;
-
   return (
     <>
       <View style={detail.fullSection}>
@@ -424,7 +417,7 @@ function LiveStudyRoomDetail() {
               key={shot.caption}
               style={[
                 detail.screenshot,
-                { width: narrow ? "100%" : "48.5%" },
+                detail.screenshotItem,
               ]}
             >
               <View style={detail.screenshotFrame}>
@@ -1121,7 +1114,11 @@ const detail = StyleSheet.create({
     marginBottom: 72,
   },
 
+  // Image and text sit side by side and wrap into a column on narrow
+  // screens. Done with flex-wrap (not window width) so the statically
+  // rendered site looks the same as the dev server.
   card: {
+    flexWrap: "wrap",
     borderRadius: 16,
     padding: 20,
     gap: 24,
@@ -1129,15 +1126,13 @@ const detail = StyleSheet.create({
   },
 
   cardMedia: {
-    width: "100%",
+    flexGrow: 1,
+    flexShrink: 1,
+    flexBasis: 400,
+    minWidth: 280,
+    alignSelf: "center",
     borderRadius: 12,
     overflow: "hidden",
-  },
-
-  cardMediaWide: {
-    flex: 1,
-    width: undefined,
-    alignSelf: "center",
   },
 
   cardImage: {
@@ -1168,12 +1163,12 @@ const detail = StyleSheet.create({
   },
 
   cardBody: {
+    flexGrow: 1,
+    flexShrink: 1,
+    flexBasis: 400,
+    minWidth: 280,
     justifyContent: "space-between",
     gap: 24,
-  },
-
-  cardBodyWide: {
-    flex: 1,
     paddingVertical: 8,
   },
 
@@ -1195,10 +1190,6 @@ const detail = StyleSheet.create({
     opacity: 0.6,
     letterSpacing: 0.5,
     marginBottom: 16,
-  },
-
-  hero: {
-    marginBottom: 56,
   },
 
   heroTitle: {
@@ -1239,31 +1230,6 @@ const detail = StyleSheet.create({
     paddingHorizontal: 14,
     paddingVertical: 6,
     overflow: "hidden",
-  },
-
-  previewImage: {
-    width: "100%",
-    maxWidth: 720,
-    aspectRatio: 16 / 10,
-    borderRadius: 8,
-    borderWidth: 0.5,
-    borderColor: "rgba(8, 32, 64, 0.15)",
-    marginTop: 28,
-  },
-
-  category: {
-    fontSize: 13,
-    color: DETAIL_COLORS.primary,
-    opacity: 0.55,
-    letterSpacing: 0.5,
-    marginBottom: 12,
-  },
-
-  readMore: {
-    fontSize: 15,
-    color: DETAIL_COLORS.primary,
-    fontWeight: "600",
-    marginTop: 20,
   },
 
   modalOverlay: {
@@ -1383,24 +1349,6 @@ const detail = StyleSheet.create({
     backgroundColor: "#fff",
   },
 
-  imageGrid: {
-    flexDirection: "row",
-    flexWrap: "wrap",
-    gap: 24,
-  },
-
-  imageWrapper: {
-    width: "65%",
-    aspectRatio: 1,
-    borderRadius: 5,
-    overflow: "hidden",
-  },
-
-  image: {
-    width: "100%",
-    height: "100%",
-  },
-
   visualImage: {
     width: "100%",
     height: 420,
@@ -1433,6 +1381,13 @@ const detail = StyleSheet.create({
 
   screenshot: {
     marginBottom: 24,
+  },
+
+  // Two per row, wrapping to one per row on narrow screens
+  screenshotItem: {
+    width: "48.5%",
+    minWidth: 240,
+    flexGrow: 1,
   },
 
   screenshotFrame: {

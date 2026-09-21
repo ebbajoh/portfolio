@@ -196,14 +196,6 @@ const styles = StyleSheet.create({
     fontWeight: "400",
   },
 
-  lead: {
-    fontSize: 18,
-    lineHeight: 28,
-    color: COLORS.muted,
-    marginBottom: 48,
-    maxWidth: 600,
-  },
-
   /* Contact items */
   links: {
     gap: 20,
