@@ -48,6 +48,15 @@ const ADDITIONAL_COURSES = [
   "Object-Oriented Programming",
   "Mechanics and Wave Physics",
   "Calculus III",
+  "Advanced Visual Data Analysis",
+  "Image Reproduction and Image Quality",
+  "Vector Analysis",
+  "Programming in C++",
+  "Image Processing and Image Analysis",
+  "Modelling and Simulation",
+  "Interaction Programming",
+  "Scientific Visualization",
+  "Observation of a Degree Project",
 ];
 
 /* ---------- Climate Cart images ---------- */
@@ -73,6 +82,18 @@ const PROJECTS_META = [
       "Built out of my own frustration with how hard it is to find where women’s football is shown. Browse upcoming matches from Damallsvenskan, WSL, Bundesliga Damer, Champions League and Liga F, see which broadcaster or streaming service has each match, and follow your favourite teams.",
     tags: ["React", "Supabase", "Google Sign-In", "Vercel"],
     image: require("../../assets/images/avspark/avspark.png"),
+    imageRatio: 1440 / 900,
+  },
+  {
+    title: "Live Study Room",
+    accent: "212, 100, 100",
+    category: "Web Development & Real-Time Apps",
+    preview:
+      "A shared virtual study room with a video in the background of people studying, to help you stay motivated.",
+    context:
+      "Course project in TDDD27, Advanced Web Programming. I often study with a YouTube video running in the background, and figured a shared study room with a video of people doing the same thing would motivate me to study even more.",
+    tags: ["React", "React Router", "Supabase", "Google Sign-In", "Vercel"],
+    image: require("../../assets/images/live-study-room/cover.png"),
     imageRatio: 1440 / 900,
   },
   {
@@ -313,6 +334,62 @@ function ProjectSection({
         </Pressable>
       </Modal>
     </Animated.View>
+  );
+}
+
+/* ---------- Project: Live Study Room ---------- */
+function LiveStudyRoomDetail() {
+  return (
+    <>
+      <View style={detail.fullSection}>
+        <Text style={detail.sectionTitle}>Overview</Text>
+        <Text style={detail.text}>
+          This project was developed as part of the course TDDD27, Advanced
+          Web Programming. Live Study Room is a web application where you can
+          study together with others in a shared virtual room.
+        </Text>
+      </View>
+
+      <View style={detail.fullSection}>
+        <Text style={detail.sectionTitle}>Background</Text>
+        <Text style={detail.text}>
+          I often study with a YouTube video running in the background. I
+          thought it would motivate me to study even more if I could do it in
+          a shared room, with a background video of people doing the same
+          thing.
+        </Text>
+      </View>
+
+      <View style={detail.fullSection}>
+        <Text style={detail.sectionTitle}>Project Team</Text>
+        <Text style={detail.text}>
+          The project was developed together with Andrea Åstrand.
+        </Text>
+      </View>
+
+      <View style={detail.fullSection}>
+        <Text style={detail.sectionTitle}>Tech Stack</Text>
+        <Text style={detail.text}>
+          React{"\n"}
+          React Router{"\n"}
+          Supabase{"\n"}
+          Google Sign-In{"\n"}
+          Vercel
+        </Text>
+      </View>
+
+      <View style={detail.fullSection}>
+        <Text style={detail.sectionTitle}>Live Site</Text>
+        <Pressable
+          onPress={() =>
+            // @ts-ignore — window is web-only
+            window.open("https://live-study-room.vercel.app", "_blank")
+          }
+        >
+          <Text style={detail.link}>Visit Live Study Room</Text>
+        </Pressable>
+      </View>
+    </>
   );
 }
 
@@ -793,15 +870,18 @@ export default function HomeScreen() {
           <AvSparkDetail />
         </ProjectSection>
         <ProjectSection index={1}>
-          <SoundscapingDetail />
+          <LiveStudyRoomDetail />
         </ProjectSection>
         <ProjectSection index={2}>
-          <MoodPlaylistDetail />
+          <SoundscapingDetail />
         </ProjectSection>
         <ProjectSection index={3}>
-          <BarnBreakDetail />
+          <MoodPlaylistDetail />
         </ProjectSection>
         <ProjectSection index={4}>
+          <BarnBreakDetail />
+        </ProjectSection>
+        <ProjectSection index={5}>
           <ClimateCartDetail />
         </ProjectSection>
 
