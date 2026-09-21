@@ -2,7 +2,9 @@ import { usePathname, useRouter } from "expo-router";
 import { useEffect, useRef } from "react";
 import {
   Animated,
+  Easing,
   Image,
+  Platform,
   Pressable,
   ScrollView,
   StyleSheet,
@@ -32,6 +34,20 @@ export default function AboutScreen() {
   const heroOpacity = useRef(new Animated.Value(0)).current;
   const heroTranslate = useRef(new Animated.Value(20)).current;
 
+  // Handwriting font for the sketchy speech bubble (web only)
+  useEffect(() => {
+    if (Platform.OS !== "web" || document.getElementById("caveat-font")) return;
+    const link = document.createElement("link");
+    link.id = "caveat-font";
+    link.rel = "stylesheet";
+    link.href = "https://fonts.googleapis.com/css2?family=Caveat:wght@600&display=swap";
+    document.head.appendChild(link);
+  }, []);
+
+  /* ---------- Speech bubble animation ---------- */
+  const bubblePop = useRef(new Animated.Value(0)).current;
+  const bubbleFloat = useRef(new Animated.Value(0)).current;
+
   useEffect(() => {
     Animated.parallel([
       Animated.timing(heroOpacity, {
@@ -45,6 +61,32 @@ export default function AboutScreen() {
         useNativeDriver: true,
       }),
     ]).start();
+
+    // Bubble pops in after the hero has appeared, then floats gently
+    Animated.timing(bubblePop, {
+      toValue: 1,
+      delay: 2000,
+      duration: 500,
+      easing: Easing.out(Easing.back(2)),
+      useNativeDriver: true,
+    }).start();
+
+    const float = Animated.loop(
+      Animated.sequence([
+        Animated.timing(bubbleFloat, {
+          toValue: 1,
+          duration: 1400,
+          useNativeDriver: true,
+        }),
+        Animated.timing(bubbleFloat, {
+          toValue: 0,
+          duration: 1400,
+          useNativeDriver: true,
+        }),
+      ])
+    );
+    float.start();
+    return () => float.stop();
   }, []);
 
   return (
@@ -79,12 +121,42 @@ export default function AboutScreen() {
         ]}
       >
         {/* Image */}
-        <View style={styles.imageFrame}>
-          <Image
-            source={require("../../assets/images/ebba.jpg")}
-            style={styles.image}
-            resizeMode="cover"
-          />
+        <View style={styles.imageWrapper}>
+          <View style={styles.imageFrame}>
+            <Image
+              source={require("../../assets/images/ebba.jpg")}
+              style={styles.image}
+              resizeMode="cover"
+            />
+          </View>
+
+          {/* Speech bubble saying hello */}
+          <Animated.View
+            pointerEvents="none"
+            style={[
+              styles.bubble,
+              {
+                opacity: bubblePop,
+                transform: [
+                  {
+                    translateY: bubbleFloat.interpolate({
+                      inputRange: [0, 1],
+                      outputRange: [0, -6],
+                    }),
+                  },
+                  { rotate: "-4deg" },
+                  { scale: bubblePop },
+                ],
+              },
+            ]}
+          >
+            {/* Second, slightly off outline gives a hand-drawn double line */}
+            <View style={styles.bubbleSketch} />
+            <View style={styles.bubbleBody}>
+              <Text style={styles.bubbleText}>Hej!</Text>
+            </View>
+            <View style={styles.bubbleTail} />
+          </Animated.View>
         </View>
 
         {/* Text */}
@@ -98,12 +170,13 @@ export default function AboutScreen() {
           </Text>
 
           <Text style={styles.heroSubtext}>
-            My interest in technology comes from the combination of logic and
-            creativity. I enjoy working in areas where problem-solving meets
-            design, such as software development, data visualization, and
-            user-centered systems. I find it especially rewarding to create
-            solutions that are not only technically sound, but also easy to
-            understand and pleasant to use.
+            I have always liked how tech mixes logic and creativity. What I
+            enjoy most is when problem-solving meets design, like in software
+            development, data visualization and user-centered systems. I love
+            building things that work well but are also easy and nice to use.
+            To me, problem-solving can also be about leading a whole project,
+            and I really like following one from the first idea all the way to
+            the finished result.
           </Text>
 
           <Text style={styles.heroSubtext}>
@@ -164,6 +237,72 @@ const styles = StyleSheet.create({
   },
 
   /* Image */
+  imageWrapper: {
+    width: 280,
+    height: 360,
+  },
+
+  bubble: {
+    position: "absolute",
+    top: 22,
+    left: -72,
+  },
+
+  // Irregular corner radii and a hard, offset shadow give a sketched look
+  bubbleBody: {
+    backgroundColor: "#FFFFFF",
+    borderWidth: 2,
+    borderColor: COLORS.primary,
+    borderTopLeftRadius: 26,
+    borderTopRightRadius: 16,
+    borderBottomRightRadius: 28,
+    borderBottomLeftRadius: 14,
+    paddingHorizontal: 22,
+    paddingVertical: 6,
+    shadowColor: COLORS.primary,
+    shadowOpacity: 0.18,
+    shadowRadius: 0,
+    shadowOffset: { width: 3, height: 4 },
+  },
+
+  bubbleSketch: {
+    position: "absolute",
+    top: -3,
+    left: 3,
+    right: -3,
+    bottom: 3,
+    borderWidth: 1.5,
+    borderColor: COLORS.primary,
+    opacity: 0.45,
+    borderTopLeftRadius: 16,
+    borderTopRightRadius: 28,
+    borderBottomRightRadius: 14,
+    borderBottomLeftRadius: 26,
+    transform: [{ rotate: "2deg" }],
+  },
+
+  bubbleText: {
+    fontSize: 30,
+    lineHeight: 36,
+    color: COLORS.primary,
+    fontWeight: "600",
+    fontFamily: '"Caveat", "Bradley Hand", "Segoe Print", cursive',
+  },
+
+  // Small rotated square that points the bubble towards the photo
+  bubbleTail: {
+    position: "absolute",
+    right: 12,
+    bottom: -9,
+    width: 15,
+    height: 15,
+    backgroundColor: "#FFFFFF",
+    borderRightWidth: 2,
+    borderBottomWidth: 2,
+    borderColor: COLORS.primary,
+    transform: [{ rotate: "38deg" }],
+  },
+
   imageFrame: {
     width: 280,
     height: 360,
