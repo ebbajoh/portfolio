@@ -70,6 +70,26 @@ const CLIMATE_IMAGES = [
   require("../../assets/images/climate cart/climate7.png"),
 ];
 
+/* ---------- Live Study Room screenshots ---------- */
+const LIVE_STUDY_ROOM_SCREENSHOTS = [
+  {
+    image: require("../../assets/images/live-study-room/create-join.png"),
+    caption: "Create your own study room or join an existing one",
+  },
+  {
+    image: require("../../assets/images/live-study-room/browse-rooms.png"),
+    caption: "Browse and search rooms, and join or request to join",
+  },
+  {
+    image: require("../../assets/images/live-study-room/room-harry-potter.png"),
+    caption: "Inside a room: shared video, chat and Pomodoro timer",
+  },
+  {
+    image: require("../../assets/images/live-study-room/room-web-programming.png"),
+    caption: "Another room, with its own background and chat",
+  },
+];
+
 /* ---------- Project preview metadata ---------- */
 const PROJECTS_META = [
   {
@@ -339,6 +359,9 @@ function ProjectSection({
 
 /* ---------- Project: Live Study Room ---------- */
 function LiveStudyRoomDetail() {
+  const { width } = useWindowDimensions();
+  const narrow = width < 640;
+
   return (
     <>
       <View style={detail.fullSection}>
@@ -367,15 +390,54 @@ function LiveStudyRoomDetail() {
         </Text>
       </View>
 
+      <View style={detail.twoColumn}>
+        <View style={detail.column}>
+          <Text style={detail.sectionTitle}>Key Features</Text>
+          <Text style={detail.text}>
+            • Create your own study room or join an existing one{"\n"}
+            • Browse and search rooms by name and tags{"\n"}
+            • Join directly or send a request to join{"\n"}
+            • Load a YouTube video into the room from a link{"\n"}
+            • Live chat and an online counter in every room{"\n"}
+            • Built-in Pomodoro timer{"\n"}
+            • Themed room backgrounds
+          </Text>
+        </View>
+
+        <View style={detail.column}>
+          <Text style={detail.sectionTitle}>Tech Stack</Text>
+          <Text style={detail.text}>
+            React{"\n"}
+            React Router{"\n"}
+            Supabase{"\n"}
+            Google Sign-In{"\n"}
+            Vercel
+          </Text>
+        </View>
+      </View>
+
       <View style={detail.fullSection}>
-        <Text style={detail.sectionTitle}>Tech Stack</Text>
-        <Text style={detail.text}>
-          React{"\n"}
-          React Router{"\n"}
-          Supabase{"\n"}
-          Google Sign-In{"\n"}
-          Vercel
-        </Text>
+        <Text style={detail.sectionTitle}>Screenshots</Text>
+        <View style={detail.screenshotGrid}>
+          {LIVE_STUDY_ROOM_SCREENSHOTS.map((shot) => (
+            <View
+              key={shot.caption}
+              style={[
+                detail.screenshot,
+                { width: narrow ? "100%" : "48.5%" },
+              ]}
+            >
+              <View style={detail.screenshotFrame}>
+                <Image
+                  source={shot.image}
+                  style={detail.screenshotImage}
+                  resizeMode="contain"
+                />
+              </View>
+              <Text style={detail.screenshotCaption}>{shot.caption}</Text>
+            </View>
+          ))}
+        </View>
       </View>
 
       <View style={detail.fullSection}>
@@ -1361,6 +1423,36 @@ const detail = StyleSheet.create({
     width: "48%",
     height: 200,
     borderRadius: 12,
+  },
+
+  screenshotGrid: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    justifyContent: "space-between",
+  },
+
+  screenshot: {
+    marginBottom: 24,
+  },
+
+  screenshotFrame: {
+    width: "100%",
+    aspectRatio: 16 / 9,
+    borderRadius: 10,
+    overflow: "hidden",
+    backgroundColor: "#EAE6DC",
+  },
+
+  screenshotImage: {
+    width: "100%",
+    height: "100%",
+  },
+
+  screenshotCaption: {
+    fontSize: 13,
+    lineHeight: 18,
+    color: DETAIL_COLORS.muted,
+    marginTop: 10,
   },
 
   mediaCaption: {
