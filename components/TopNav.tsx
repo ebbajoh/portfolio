@@ -3,7 +3,6 @@ import { Pressable, StyleSheet, Text, View } from "react-native";
 
 const MENU = [
   { label: "HOME", route: "/" },
-  { label: "RESUME", route: "/resume" },
   { label: "ABOUT ME", route: "/about" },
   { label: "CONTACT", route: "/contact" },
 ]as const;

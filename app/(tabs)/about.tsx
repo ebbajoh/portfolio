@@ -13,7 +13,6 @@ import {
 /* ---------- Navigation config ---------- */
 const MENU = [
   { label: "HOME", route: "/" },
-  { label: "RESUME", route: "/resume" },
   { label: "ABOUT ME", route: "/about" },
   { label: "CONTACT", route: "/contact" },
 ] as const;
@@ -109,7 +108,8 @@ export default function AboutScreen() {
 
           <Text style={styles.heroSubtext}>
             Outside of my studies, I enjoy spending time cooking, listening to
-            music, and being with my boyfriend and friends.
+            music, and being with my boyfriend and friends. I am also a big
+            football fan, and I love following women’s football in particular.
           </Text>
         </View>
       </Animated.View>

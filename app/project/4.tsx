@@ -13,7 +13,6 @@ import {
 /* ---------- Navigation config ---------- */
 const MENU = [
   { label: "HOME", route: "/" },
-  { label: "RESUME", route: "/resume" },
   { label: "ABOUT ME", route: "/about" },
   { label: "CONTACT", route: "/contact" },
 ] as const;
